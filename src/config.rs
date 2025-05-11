@@ -1,0 +1,28 @@
+use bevy::prelude::LinearRgba;
+
+pub const SQUARE_SIZE: f32 = 90.;
+
+const WINDOW_HEIGHT: f32 = 30.;
+const WINDOW_WIGTH: f32 = 30.;
+
+pub const DISPLAY_WINDOW_HEIGHT: f32 = SQUARE_SIZE*WINDOW_HEIGHT;
+pub const DISPLAY_WINDOW_WIGTH: f32 = SQUARE_SIZE*WINDOW_WIGTH;
+
+const GAME_OVER_WINDOW_HEIGHT: f32 = 7.5;
+const GAME_OVER_WINDOW_WIGTH: f32 = 10.;
+
+pub const DISPLAY_GAME_OVER_WINDOW_HEIGHT: f32 = SQUARE_SIZE*GAME_OVER_WINDOW_HEIGHT;
+pub const DISPLAY_GAME_OVER_WINDOW_WIGTH: f32 = SQUARE_SIZE*GAME_OVER_WINDOW_WIGTH;
+
+const HEADER: f32 = SQUARE_SIZE;
+
+pub const SCORE_FONT_SIZE: f32 = 20.;
+
+pub const DISPLAY_SCORE_POSITION_X: f32 = SQUARE_SIZE * 3.;
+pub const DISPLAY_SCORE_POSITION_Y: f32 = WINDOW_HEIGHT / 2.;
+
+pub const BORDER_SIZE: f32 = 20.;
+
+pub const BOARD_COLOR: LinearRgba = LinearRgba::BLACK;
+pub const SCORE_COLOR: LinearRgba = LinearRgba::new(255., 51., 255., 255.);
+pub const BORDER_COLOR: LinearRgba = LinearRgba::new(150., 150., 150., 255.);

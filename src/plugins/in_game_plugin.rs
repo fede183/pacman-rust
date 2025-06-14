@@ -1,5 +1,7 @@
 use bevy::prelude::*;
+use crate::components::Pacman;
 use crate::stage::init_stage;
+use crate::stage::trigger_animation;
 use crate::utils::cycle_timer::*;
 use crate::utils::event_blocker::EventBlocker;
 use crate::events::*;
@@ -20,8 +22,8 @@ impl<S: States> Plugin for InGamePlugin<S> {
             .init_resource::<EventBlocker>()
             .add_plugins(DefaultPlugins)
             .add_systems(Startup, (init_camera, toggle_window, init_stage, init_header))
-            .add_systems(Update, (update_score, input_system, cycle_system, toggle_game_over)
-                .run_if(in_state(self.state.clone())));
+            .add_systems(Update, (update_score, input_system, cycle_system, toggle_game_over, execute_animations_pacman)
+            .run_if(in_state(self.state.clone())));
     }
 }
 

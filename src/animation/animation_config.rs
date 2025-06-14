@@ -1,13 +1,13 @@
-use bevy::{input::common_conditions::input_just_pressed, prelude::*};
+use bevy::prelude::*;
 use std::time::Duration;
 
 
 #[derive(Component)]
 pub struct AnimationConfig {
     pub first_sprite_index: usize,
-    last_sprite_index: usize,
-    fps: u8,
-    frame_timer: Timer,
+    pub last_sprite_index: usize,
+    pub fps: u8,
+    pub frame_timer: Timer,
 }
 
 impl AnimationConfig {
@@ -20,7 +20,7 @@ impl AnimationConfig {
         }
     }
 
-    fn timer_from_fps(fps: u8) -> Timer {
+    pub fn timer_from_fps(fps: u8) -> Timer {
         Timer::new(Duration::from_secs_f32(1.0 / (fps as f32)), TimerMode::Once)
     }
 }

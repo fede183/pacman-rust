@@ -10,6 +10,12 @@ pub fn init_stage(
     init_pacman(commands, asset_server, texture_atlas_layouts);
 }
 
+// This system runs when the user clicks the left arrow key or right arrow key
+pub fn trigger_animation<S: Component>(mut animation: Single<&mut AnimationConfig, With<S>>) {
+    // We create a new timer when the animation is triggered
+    animation.frame_timer = AnimationConfig::timer_from_fps(animation.fps);
+}
+
 pub fn init_pacman(
     mut commands: Commands, 
     asset_server: Res<AssetServer>,
@@ -18,11 +24,11 @@ pub fn init_pacman(
 
     let texture = asset_server.load("images/pacman_sprite_sheet.png");
     // The sprite sheet has 7 sprites arranged in a row, and they are all 24px x 24px
-    let layout = TextureAtlasLayout::from_grid(UVec2::splat(14), 6, 2, None, None);
+    let layout = TextureAtlasLayout::from_grid(UVec2::splat(14), 2, 1, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
 
     // The first (left-hand) sprite runs at 10 FPS
-    let animation_config_1 = AnimationConfig::new(1, 6, 10);
+    let animation_config_1 = AnimationConfig::new(1, 2, 10);
 
 
     commands.spawn((
@@ -40,5 +46,6 @@ pub fn init_pacman(
           custom_size: Some(Vec2::new(SQUARE_SIZE, SQUARE_SIZE)),
           ..default()
         },
+        animation_config_1,
     ));
 }

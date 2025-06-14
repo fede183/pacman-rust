@@ -1,4 +1,4 @@
-use bevy::prelude::LinearRgba;
+use bevy::{math::Vec3, prelude::LinearRgba};
 
 pub const SQUARE_SIZE: f32 = 90.;
 
@@ -14,15 +14,22 @@ const GAME_OVER_WINDOW_WIGTH: f32 = 10.;
 pub const DISPLAY_GAME_OVER_WINDOW_HEIGHT: f32 = SQUARE_SIZE*GAME_OVER_WINDOW_HEIGHT;
 pub const DISPLAY_GAME_OVER_WINDOW_WIGTH: f32 = SQUARE_SIZE*GAME_OVER_WINDOW_WIGTH;
 
-const HEADER: f32 = SQUARE_SIZE;
+pub const HEADER_HEIGHT: f32 = SQUARE_SIZE * 1.2;
+pub const HEADER_WIGTH: f32 = SQUARE_SIZE;
+pub const HEADER_BORDER_SIZE: f32 = 10.;
+pub const HEADER_POSITIONS: Vec3 = Vec3::new(0., DISPLAY_SCORE_POSITION_Y, 1.);
 
 pub const SCORE_FONT_SIZE: f32 = 20.;
 
-pub const DISPLAY_SCORE_POSITION_X: f32 = SQUARE_SIZE * 3.;
-pub const DISPLAY_SCORE_POSITION_Y: f32 = WINDOW_HEIGHT / 2.;
+pub const DISPLAY_SCORE_POSITION_X: f32 = - (SQUARE_SIZE * 3.);
+pub const DISPLAY_SCORE_POSITION_Y: f32 = (DISPLAY_WINDOW_HEIGHT / 2.) - (SQUARE_SIZE * 2.);
+pub const DISPLAY_CLOCK_POSITION_X: f32 = SQUARE_SIZE * 3.;
+pub const DISPLAY_CLOCK_POSITION_Y: f32 = DISPLAY_SCORE_POSITION_Y;
 
 pub const BORDER_SIZE: f32 = 20.;
 
 pub const BOARD_COLOR: LinearRgba = LinearRgba::BLACK;
 pub const SCORE_COLOR: LinearRgba = LinearRgba::new(255., 51., 255., 255.);
 pub const BORDER_COLOR: LinearRgba = LinearRgba::new(150., 150., 150., 255.);
+pub const HEADER_FILL_COLOR: LinearRgba = LinearRgba::BLACK;
+pub const HEADER_BORDER_COLOR: LinearRgba = LinearRgba::WHITE;

@@ -19,7 +19,7 @@ impl<S: States> Plugin for InGamePlugin<S> {
             .init_resource::<CycleTimer>()
             .init_resource::<EventBlocker>()
             .add_plugins(DefaultPlugins)
-            .add_systems(Startup, (init_camera, toggle_window, init_stage, init_score, setup_music))
+            .add_systems(Startup, (init_camera, toggle_window, init_stage, init_header))
             .add_systems(Update, (update_score, input_system, cycle_system, toggle_game_over)
                 .run_if(in_state(self.state.clone())));
     }

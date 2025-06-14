@@ -33,16 +33,17 @@ pub fn input_system(
     event_blocker.lock_process();
 
     let (entity, mut transform) = query_pacman_transformation.single_mut();
+    let movement_distance = SQUARE_SIZE / 3.;
 
     if key_pressed(&input, KeyCode::ArrowDown) {
-        transform.translation.y -= SQUARE_SIZE;
+        transform.translation.y -= movement_distance;
     }
     
     if key_pressed(&input, KeyCode::ArrowLeft) {
-        transform.translation.x -= SQUARE_SIZE;
+        transform.translation.x -= movement_distance;
     }
     if key_pressed(&input, KeyCode::ArrowRight) {
-        transform.translation.x += SQUARE_SIZE;
+        transform.translation.x += movement_distance;
     }
 
     event_blocker.finish_process();

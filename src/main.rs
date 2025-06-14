@@ -7,6 +7,7 @@ mod utils;
 mod plugins;
 mod sprites;
 mod components;
+mod animation;
 
 use bevy::prelude::*;
 use game::game_state::{GameState, Playing};

@@ -24,11 +24,11 @@ pub fn init_pacman(
 
     let texture = asset_server.load("images/pacman_sprite_sheet.png");
     // The sprite sheet has 7 sprites arranged in a row, and they are all 24px x 24px
-    let layout = TextureAtlasLayout::from_grid(UVec2::splat(14), 2, 1, None, None);
+    let layout = TextureAtlasLayout::from_grid(UVec2::splat(16), 2, 1, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
 
     // The first (left-hand) sprite runs at 10 FPS
-    let animation_config_1 = AnimationConfig::new(1, 2, 10);
+    let animation_config_1 = AnimationConfig::new(0, 1, 5);
 
 
     commands.spawn((

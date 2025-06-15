@@ -69,9 +69,9 @@ pub fn execute_animations_pacman(
                 } else {
                     // ...and it is NOT the last frame, then we move to the next frame...
                     atlas.index += 1;
-                    // ...and reset the frame timer to start counting all over again
-                    config.frame_timer = AnimationConfig::timer_from_fps(config.fps);
                 }
+                // ...and reset the frame timer to start counting all over again
+                config.frame_timer = AnimationConfig::timer_from_fps(config.fps);
             }
         }
     }

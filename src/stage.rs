@@ -1,13 +1,16 @@
 use bevy::prelude::*;
 use crate::{components::Pacman, config::SQUARE_SIZE};
 use crate::animation::animation_config::AnimationConfig;
+use crate::config::*;
+use crate::sprites::rectagle::RectangleWithBorder;
 
 pub fn init_stage(
-    commands: Commands, 
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
     ) {
-    init_pacman(commands, asset_server, texture_atlas_layouts);
+    init_limit(&mut commands);
+    init_pacman(&mut commands, asset_server, texture_atlas_layouts);
 }
 
 // This system runs when the user clicks the left arrow key or right arrow key
@@ -17,7 +20,7 @@ pub fn trigger_animation<S: Component>(mut animation: Single<&mut AnimationConfi
 }
 
 pub fn init_pacman(
-    mut commands: Commands, 
+    commands: &mut Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
     ) { 
@@ -43,9 +46,19 @@ pub fn init_pacman(
             layout: texture_atlas_layout.clone(),
             index: animation_config_1.first_sprite_index,
           }),
-          custom_size: Some(Vec2::new(SQUARE_SIZE, SQUARE_SIZE)),
+          custom_size: Some(Vec2::new(SQUARE_SIZE / 2., SQUARE_SIZE / 2.)),
           ..default()
         },
         animation_config_1,
     ));
+}
+
+pub fn init_limit(
+    commands: &mut Commands,
+    ) { 
+    let header = RectangleWithBorder::new(LIMIT_HEIGHT, LIMIT_WIGTH, HEADER_BORDER_SIZE, HEADER_FILL_COLOR, HEADER_BORDER_COLOR);
+
+    let positions = LIMIT_POSITIONS;
+
+    header.spawn(commands, positions);
 }

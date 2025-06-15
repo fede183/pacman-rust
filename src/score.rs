@@ -28,7 +28,7 @@ pub fn init_header(
     let text_score = Text2d::new(score_text);
     let text_clock = Text2d::new(clock_text);
     
-    let transform_score = Transform::from_xyz(DISPLAY_SCORE_POSITION_X, DISPLAY_SCORE_POSITION_Y, 2.);
+    let transform_score = Transform::from_xyz(DISPLAY_SCORE_POSITION_X, DISPLAY_SCORE_POSITION_Y, 4.);
 
     commands.spawn((ScoreComponent,
             text_score,
@@ -38,7 +38,7 @@ pub fn init_header(
             transform_score
     ));
 
-    let transform_clock = Transform::from_xyz(DISPLAY_CLOCK_POSITION_X, DISPLAY_CLOCK_POSITION_Y, 2.);
+    let transform_clock = Transform::from_xyz(DISPLAY_CLOCK_POSITION_X, DISPLAY_CLOCK_POSITION_Y, 4.);
 
     commands.spawn((ClockComponent,
             text_clock,

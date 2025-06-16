@@ -17,6 +17,7 @@ pub fn input_system(
     ) {
     
     if !(key_pressed(&input, KeyCode::ArrowDown) || 
+        key_pressed(&input, KeyCode::ArrowUp) || 
         key_pressed(&input, KeyCode::ArrowLeft) || 
         key_pressed(&input, KeyCode::ArrowRight) ||
         key_pressed(&input, KeyCode::Space)) {
@@ -38,12 +39,19 @@ pub fn input_system(
 
     if key_pressed(&input, KeyCode::ArrowDown) {
         transform.translation.y -= movement_distance;
+        transform.rotation = Quat::from_rotation_z(270.0_f32.to_radians());
+    }
+    if key_pressed(&input, KeyCode::ArrowUp) {
+        transform.translation.y += movement_distance;
+        transform.rotation = Quat::from_rotation_z(90.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowLeft) {
         transform.translation.x -= movement_distance;
+        transform.rotation = Quat::from_rotation_y(180.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowRight) {
         transform.translation.x += movement_distance;
+        transform.rotation = Quat::from_rotation_y(0.0_f32.to_radians());
     }
 
     event_blocker.finish_process();

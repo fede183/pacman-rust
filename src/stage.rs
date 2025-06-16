@@ -1,8 +1,11 @@
+use std::collections::LinkedList;
+
 use bevy::prelude::*;
+use crate::components::Limit;
 use crate::{components::Pacman, config::SQUARE_SIZE};
 use crate::animation::animation_config::AnimationConfig;
 use crate::config::*;
-use crate::sprites::rectagle::RectangleWithBorder;
+use crate::sprites::rectagle::Rectangle;
 
 pub fn init_stage(
     mut commands: Commands,
@@ -56,9 +59,26 @@ pub fn init_pacman(
 pub fn init_limit(
     commands: &mut Commands,
     ) { 
-    let header = RectangleWithBorder::new(LIMIT_HEIGHT, LIMIT_WIGTH, HEADER_BORDER_SIZE, HEADER_FILL_COLOR, HEADER_BORDER_COLOR);
+    let mut limits = LinkedList::new();
+    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
+    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
+    let limit_border_up = Rectangle::new(3., LIMIT_WIGTH, HEADER_BORDER_COLOR);
+    let limit_border_down = Rectangle::new(3., LIMIT_WIGTH, HEADER_BORDER_COLOR);
 
-    let positions = LIMIT_POSITIONS;
+    let position_left = Vec3::new(-LIMIT_WIGTH / 2., LIMIT_POSITIONS.y, LIMIT_POSITIONS.z);
+    let position_right = Vec3::new(LIMIT_WIGTH / 2., LIMIT_POSITIONS.y, LIMIT_POSITIONS.z);
+    let position_up = Vec3::new(LIMIT_POSITIONS.x, SQUARE_SIZE * 3.5, LIMIT_POSITIONS.z);
+    let position_down = Vec3::new(LIMIT_POSITIONS.x, -SQUARE_SIZE * 5.5, LIMIT_POSITIONS.z);
 
-    header.spawn(commands, positions);
+    limits.push_front((limit_border_left, position_left));
+    limits.push_front((limit_border_right, position_right));
+    limits.push_front((limit_border_up, position_up));
+    limits.push_front((limit_border_down, position_down));
+
+    for limit in limits {
+        commands.spawn((
+            Limit,
+            limit.0.generate_sprite(limit.1)
+        ));
+    }
 }

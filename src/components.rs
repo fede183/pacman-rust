@@ -4,7 +4,7 @@ use bevy::prelude::*;
 pub struct Pacman;
 
 #[derive(Component)]
-pub struct Limit;
+pub struct Wall;
 
 #[derive(Component)]
 pub struct Phantom;

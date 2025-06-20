@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 
 use bevy::prelude::*;
-use crate::components::Limit;
+use crate::components::Wall;
 use crate::{components::Pacman, config::SQUARE_SIZE};
 use crate::animation::animation_config::AnimationConfig;
 use crate::config::*;
@@ -12,7 +12,7 @@ pub fn init_stage(
     asset_server: Res<AssetServer>,
     texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
     ) {
-    init_limit(&mut commands);
+    init_wall(&mut commands);
     init_pacman(&mut commands, asset_server, texture_atlas_layouts);
 }
 
@@ -56,10 +56,10 @@ pub fn init_pacman(
     ));
 }
 
-pub fn init_limit(
+pub fn init_wall(
     commands: &mut Commands,
     ) { 
-    let mut limits = LinkedList::new();
+    let mut walls = LinkedList::new();
     let limit_border_left = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
     let limit_border_right = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
     let limit_border_up = Rectangle::new(3., LIMIT_WIGTH, HEADER_BORDER_COLOR);
@@ -70,15 +70,15 @@ pub fn init_limit(
     let position_up = Vec3::new(LIMIT_POSITIONS.x, SQUARE_SIZE * 3.5, LIMIT_POSITIONS.z);
     let position_down = Vec3::new(LIMIT_POSITIONS.x, -SQUARE_SIZE * 5.5, LIMIT_POSITIONS.z);
 
-    limits.push_front((limit_border_left, position_left));
-    limits.push_front((limit_border_right, position_right));
-    limits.push_front((limit_border_up, position_up));
-    limits.push_front((limit_border_down, position_down));
+    walls.push_front((limit_border_left, position_left));
+    walls.push_front((limit_border_right, position_right));
+    walls.push_front((limit_border_up, position_up));
+    walls.push_front((limit_border_down, position_down));
 
-    for limit in limits {
+    for wall in walls {
         commands.spawn((
-            Limit,
-            limit.0.generate_sprite(limit.1)
+            Wall,
+            wall.0.generate_sprite(wall.1)
         ));
     }
 }

@@ -5,22 +5,20 @@ use crate::config::SQUARE_SIZE;
 use crate::game::game_state::GameState;
 use crate::utils::cycle_timer::CycleTimer;
 use crate::utils::event_blocker::EventBlocker;
-use crate::components::Pacman;
+use crate::components::{Wall, Pacman};
 
 pub fn input_system(
-    mut commands: Commands,
     input: Res<ButtonInput<KeyCode>>,
-    mut game_data: ResMut<GameData>,
     mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,
-    mut query_pacman_transformation: Query<(Entity, &mut Transform), With<Pacman>>,
+    mut query_pacman_transformation: Query<&mut Transform, With<Pacman>>,
+    query_limit_transformation: Query<&Transform, With<Wall>>,
     ) {
     
     if !(key_pressed(&input, KeyCode::ArrowDown) || 
         key_pressed(&input, KeyCode::ArrowUp) || 
         key_pressed(&input, KeyCode::ArrowLeft) || 
-        key_pressed(&input, KeyCode::ArrowRight) ||
-        key_pressed(&input, KeyCode::Space)) {
+        key_pressed(&input, KeyCode::ArrowRight)) {
         return;
     }
 
@@ -34,25 +32,41 @@ pub fn input_system(
     
     event_blocker.lock_process();
 
-    let (entity, mut transform) = query_pacman_transformation.single_mut();
+    let mut transform = query_pacman_transformation.single_mut();
     let movement_distance = SQUARE_SIZE / 3.;
 
+    let mut transform_pacman_temp = transform.clone();
+
     if key_pressed(&input, KeyCode::ArrowDown) {
-        transform.translation.y -= movement_distance;
-        transform.rotation = Quat::from_rotation_z(270.0_f32.to_radians());
+        transform_pacman_temp.translation.y -= movement_distance;
+        transform_pacman_temp.rotation = Quat::from_rotation_z(270.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowUp) {
-        transform.translation.y += movement_distance;
-        transform.rotation = Quat::from_rotation_z(90.0_f32.to_radians());
+        transform_pacman_temp.translation.y += movement_distance;
+        transform_pacman_temp.rotation = Quat::from_rotation_z(90.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowLeft) {
-        transform.translation.x -= movement_distance;
-        transform.rotation = Quat::from_rotation_y(180.0_f32.to_radians());
+        transform_pacman_temp.translation.x -= movement_distance;
+        transform_pacman_temp.rotation = Quat::from_rotation_y(180.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowRight) {
-        transform.translation.x += movement_distance;
-        transform.rotation = Quat::from_rotation_y(0.0_f32.to_radians());
+        transform_pacman_temp.translation.x += movement_distance;
+        transform_pacman_temp.rotation = Quat::from_rotation_y(0.0_f32.to_radians());
     }
+
+    for transform_limit in query_limit_transformation.iter() {
+        let distance = transform_pacman_temp.translation.distance(transform_limit.translation);
+        let pacman_radious = SQUARE_SIZE / 2.;
+        let limit_radious = 3.;
+        if distance < pacman_radious + limit_radious {
+            println!("Collition detected");
+            event_blocker.finish_process();
+            return;
+        }
+    }
+    
+    transform.translation = transform_pacman_temp.translation;
+    transform.rotation = transform_pacman_temp.rotation;
 
     event_blocker.finish_process();
 }
@@ -87,8 +101,6 @@ pub fn execute_animations_pacman(
 
 
 pub fn cycle_system(
-    mut commands: Commands,
-    mut game_data: ResMut<GameData>,
     mut cycle_system: ResMut<CycleTimer>,
     mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,

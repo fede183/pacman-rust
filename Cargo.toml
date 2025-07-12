@@ -7,3 +7,4 @@ edition = "2021"
 bevy = { version = "0.15.0", features = ["wav"] }
 rand = "0.8.5"
 rand_derive2 = "0.1.21"
+bevy_rapier2d = "*"

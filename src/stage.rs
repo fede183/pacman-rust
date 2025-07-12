@@ -1,8 +1,9 @@
 use std::collections::LinkedList;
 
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 use crate::components::Wall;
-use crate::{components::Pacman, config::SQUARE_SIZE};
+use crate::components::Pacman;
 use crate::animation::animation_config::AnimationConfig;
 use crate::config::*;
 use crate::sprites::rectagle::Rectangle;
@@ -40,7 +41,7 @@ pub fn init_pacman(
     commands.spawn((
         Pacman,
         Transform {
-            translation: Vec3::new(0., 0., 5.),
+            translation: Vec3::new(0., 0., 2.),
             ..default()
         },
         Sprite {
@@ -49,10 +50,11 @@ pub fn init_pacman(
             layout: texture_atlas_layout.clone(),
             index: animation_config_1.first_sprite_index,
           }),
-          custom_size: Some(Vec2::new(SQUARE_SIZE / 2., SQUARE_SIZE / 2.)),
+          custom_size: Some(Vec2::new(PACMAN_SIZE, PACMAN_SIZE)),
           ..default()
         },
         animation_config_1,
+        Collider::cuboid(PACMAN_SIZE/2., PACMAN_SIZE/2.),
     ));
 }
 
@@ -60,25 +62,21 @@ pub fn init_wall(
     commands: &mut Commands,
     ) { 
     let mut walls = LinkedList::new();
-    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
-    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, 3., HEADER_BORDER_COLOR);
-    let limit_border_up = Rectangle::new(3., LIMIT_WIGTH, HEADER_BORDER_COLOR);
-    let limit_border_down = Rectangle::new(3., LIMIT_WIGTH, HEADER_BORDER_COLOR);
+    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, HEADER_BORDER_COLOR);
+    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, HEADER_BORDER_COLOR);
+    let limit_border_up = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, HEADER_BORDER_COLOR);
+    let limit_border_down = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, HEADER_BORDER_COLOR);
 
-    let position_left = Vec3::new(-LIMIT_WIGTH / 2., LIMIT_POSITIONS.y, LIMIT_POSITIONS.z);
-    let position_right = Vec3::new(LIMIT_WIGTH / 2., LIMIT_POSITIONS.y, LIMIT_POSITIONS.z);
-    let position_up = Vec3::new(LIMIT_POSITIONS.x, SQUARE_SIZE * 3.5, LIMIT_POSITIONS.z);
-    let position_down = Vec3::new(LIMIT_POSITIONS.x, -SQUARE_SIZE * 5.5, LIMIT_POSITIONS.z);
-
-    walls.push_front((limit_border_left, position_left));
-    walls.push_front((limit_border_right, position_right));
-    walls.push_front((limit_border_up, position_up));
-    walls.push_front((limit_border_down, position_down));
+    walls.push_front((limit_border_left, WALL_LEFT_POSITION));
+    walls.push_front((limit_border_right, WALL_RIGHT_POSITION));
+    walls.push_front((limit_border_up, WALL_UP_POSITION));
+    walls.push_front((limit_border_down, WALL_DOWN_POSITION));
 
     for wall in walls {
         commands.spawn((
             Wall,
-            wall.0.generate_sprite(wall.1)
+            wall.0.generate_sprite(wall.1),
+            Collider::cuboid(wall.0.wigth/2. , wall.0.height/2.),
         ));
     }
 }

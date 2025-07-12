@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use crate::animation::animation_config::AnimationConfig;
 use crate::game::game_data::GameData;
-use crate::config::SQUARE_SIZE;
+use crate::config::{PACMAN_SIZE, SQUARE_SIZE};
 use crate::game::game_state::GameState;
 use crate::utils::cycle_timer::CycleTimer;
 use crate::utils::event_blocker::EventBlocker;
@@ -11,7 +11,7 @@ pub fn input_system(
     input: Res<ButtonInput<KeyCode>>,
     mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,
-    mut query_pacman_transformation: Query<&mut Transform, With<Pacman>>,
+    mut query_pacman_transformation: Query<&mut Transform, (With<Pacman>, Without<Wall>)>,
     query_limit_transformation: Query<&Transform, With<Wall>>,
     ) {
     
@@ -54,16 +54,17 @@ pub fn input_system(
         transform_pacman_temp.rotation = Quat::from_rotation_y(0.0_f32.to_radians());
     }
 
-    for transform_limit in query_limit_transformation.iter() {
-        let distance = transform_pacman_temp.translation.distance(transform_limit.translation);
-        let pacman_radious = SQUARE_SIZE / 2.;
-        let limit_radious = 3.;
-        if distance < pacman_radious + limit_radious {
-            println!("Collition detected");
-            event_blocker.finish_process();
-            return;
-        }
-    }
+    // for transform_limit in query_limit_transformation.iter() {
+    //     let distance = transform_pacman_temp.translation.distance(transform_limit.translation);
+    //     let pacman_radious = PACMAN_SIZE * 2.;
+    //     let limit_radious = 3.;
+    //     println!("{}", distance);
+    //     if distance < pacman_radious + limit_radious {
+    //         println!("Collition detected");
+    //         event_blocker.finish_process();
+    //         return;
+    //     }
+    // }
     
     transform.translation = transform_pacman_temp.translation;
     transform.rotation = transform_pacman_temp.rotation;

@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 pub struct Rectangle {
-    height: f32, 
-    wigth: f32, 
+    pub height: f32, 
+    pub wigth: f32, 
     fill_color: LinearRgba, 
 }
 

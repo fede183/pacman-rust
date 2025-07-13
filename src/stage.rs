@@ -54,7 +54,9 @@ pub fn init_pacman(
           ..default()
         },
         animation_config_1,
+        KinematicCharacterController::default(),
         Collider::cuboid(PACMAN_SIZE/2., PACMAN_SIZE/2.),
+        Sensor::default(),
     ));
 }
 

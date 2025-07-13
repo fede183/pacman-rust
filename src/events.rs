@@ -1,7 +1,8 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::{KinematicCharacterController, KinematicCharacterControllerOutput};
 use crate::animation::animation_config::AnimationConfig;
 use crate::game::game_data::GameData;
-use crate::config::{PACMAN_SIZE, SQUARE_SIZE};
+use crate::config::SQUARE_SIZE;
 use crate::game::game_state::GameState;
 use crate::utils::cycle_timer::CycleTimer;
 use crate::utils::event_blocker::EventBlocker;
@@ -11,8 +12,8 @@ pub fn input_system(
     input: Res<ButtonInput<KeyCode>>,
     mut event_blocker: ResMut<EventBlocker>,
     time: ResMut<Time>,
-    mut query_pacman_transformation: Query<&mut Transform, (With<Pacman>, Without<Wall>)>,
-    query_limit_transformation: Query<&Transform, With<Wall>>,
+    mut query_pacman_transformation: Query<(&mut Transform, &mut KinematicCharacterController), (With<Pacman>, Without<Wall>)>,
+    controller_output: Query<&KinematicCharacterControllerOutput>,
     ) {
     
     if !(key_pressed(&input, KeyCode::ArrowDown) || 
@@ -32,42 +33,37 @@ pub fn input_system(
     
     event_blocker.lock_process();
 
-    let mut transform = query_pacman_transformation.single_mut();
+    if let Ok(output) = controller_output.get_single() {
+        info!("{:?}", output);
+    }
+
+    let (mut transform, mut controller) = query_pacman_transformation.single_mut();
     let movement_distance = SQUARE_SIZE / 3.;
 
-    let mut transform_pacman_temp = transform.clone();
+    let mut to_move = Vec2::ZERO;
+    let mut to_rotate = Quat::from_rotation_z(270.0_f32.to_radians());
 
     if key_pressed(&input, KeyCode::ArrowDown) {
-        transform_pacman_temp.translation.y -= movement_distance;
-        transform_pacman_temp.rotation = Quat::from_rotation_z(270.0_f32.to_radians());
+        to_move.y -= movement_distance;
+        to_rotate = Quat::from_rotation_z(270.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowUp) {
-        transform_pacman_temp.translation.y += movement_distance;
-        transform_pacman_temp.rotation = Quat::from_rotation_z(90.0_f32.to_radians());
+        to_move.y += movement_distance;
+        to_rotate = Quat::from_rotation_z(90.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowLeft) {
-        transform_pacman_temp.translation.x -= movement_distance;
-        transform_pacman_temp.rotation = Quat::from_rotation_y(180.0_f32.to_radians());
+        to_move.x -= movement_distance;
+        to_rotate = Quat::from_rotation_y(180.0_f32.to_radians());
     }
     if key_pressed(&input, KeyCode::ArrowRight) {
-        transform_pacman_temp.translation.x += movement_distance;
-        transform_pacman_temp.rotation = Quat::from_rotation_y(0.0_f32.to_radians());
+        to_move.x += movement_distance;
+        to_rotate = Quat::from_rotation_y(0.0_f32.to_radians());
     }
 
-    // for transform_limit in query_limit_transformation.iter() {
-    //     let distance = transform_pacman_temp.translation.distance(transform_limit.translation);
-    //     let pacman_radious = PACMAN_SIZE * 2.;
-    //     let limit_radious = 3.;
-    //     println!("{}", distance);
-    //     if distance < pacman_radious + limit_radious {
-    //         println!("Collition detected");
-    //         event_blocker.finish_process();
-    //         return;
-    //     }
-    // }
-    
-    transform.translation = transform_pacman_temp.translation;
-    transform.rotation = transform_pacman_temp.rotation;
+    controller.translation = Some(to_move);
+
+    // transform.translation = transform_pacman_temp.translation;
+    transform.rotation = to_rotate;
 
     event_blocker.finish_process();
 }

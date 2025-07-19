@@ -1,12 +1,10 @@
-use std::collections::LinkedList;
-
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use crate::components::Wall;
 use crate::components::Pacman;
 use crate::animation::animation_config::AnimationConfig;
 use crate::config::*;
-use crate::sprites::rectagle::Rectangle;
+use crate::config_walls::*;
 
 pub fn init_stage(
     mut commands: Commands,
@@ -63,22 +61,16 @@ pub fn init_pacman(
 pub fn init_wall(
     commands: &mut Commands,
     ) { 
-    let mut walls = LinkedList::new();
-    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, HEADER_BORDER_COLOR);
-    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, HEADER_BORDER_COLOR);
-    let limit_border_up = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, HEADER_BORDER_COLOR);
-    let limit_border_down = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, HEADER_BORDER_COLOR);
 
-    walls.push_front((limit_border_left, WALL_LEFT_POSITION));
-    walls.push_front((limit_border_right, WALL_RIGHT_POSITION));
-    walls.push_front((limit_border_up, WALL_UP_POSITION));
-    walls.push_front((limit_border_down, WALL_DOWN_POSITION));
+    let walls = get_wall_bundles();
 
     for wall in walls {
-        commands.spawn((
-            Wall,
-            wall.0.generate_sprite(wall.1),
-            Collider::cuboid(wall.0.wigth/2. , wall.0.height/2.),
-        ));
+        if let Some(custom_size) = wall.sprite.custom_size { 
+            commands.spawn((
+                Wall,
+                wall,
+                Collider::cuboid(custom_size.x/2., custom_size.y/2.),
+            ));
+        }
     }
 }

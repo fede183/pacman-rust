@@ -1,5 +1,6 @@
 mod stage;
 mod config;
+mod config_walls;
 mod score;
 mod events;
 mod game;

@@ -8,7 +8,7 @@ pub struct Rectangle {
 
 #[derive(Bundle)]
 pub struct RectangleBundle {
-    sprite: Sprite,
+    pub sprite: Sprite,
     transform: Transform
 }
 

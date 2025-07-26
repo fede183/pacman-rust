@@ -48,9 +48,8 @@ pub fn init_header(
             transform_clock
     ));
 
-    let header = RectangleWithBorder::new(HEADER_HEIGHT, HEADER_WIGTH, HEADER_BORDER_SIZE, HEADER_FILL_COLOR, HEADER_BORDER_COLOR);
-    let positions = HEADER_POSITIONS;
-    header.spawn(&mut commands, positions);
+    let header = RectangleWithBorder::new(HEADER_HEIGHT, HEADER_WIGTH, HEADER_BORDER_SIZE, HEADER_POSITIONS, HEADER_FILL_COLOR, HEADER_BORDER_COLOR);
+    header.spawn(&mut commands);
 }
 
 pub fn update_score(

@@ -19,7 +19,7 @@ fn init_game_over_windows(
     asset_server: Res<AssetServer>,
     game_data: ResMut<GameData>,
     ) {
-    RectangleWithBorder::new(DISPLAY_GAME_OVER_WINDOW_WIGTH, DISPLAY_GAME_OVER_WINDOW_HEIGHT, BORDER_SIZE, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands, Vec3{ x: 0., y: 0., z: 7.});
+    RectangleWithBorder::new(DISPLAY_GAME_OVER_WINDOW_WIGTH, DISPLAY_GAME_OVER_WINDOW_HEIGHT, BORDER_SIZE, Vec3{ x: 0., y: 0., z: 7.}, BOARD_COLOR, BORDER_COLOR).spawn(&mut commands);
     
     let font = asset_server.load("fonts/textFont.ttf");
     let text_style = TextFont {

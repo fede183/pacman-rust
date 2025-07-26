@@ -1,5 +1,3 @@
-use std::collections::LinkedList;
-
 use bevy::{math::Vec3, prelude::LinearRgba};
 use crate::{config::*, sprites::rectagle::{Rectangle, RectangleBundle}};
 
@@ -17,24 +15,24 @@ const WALL_DOWN_POSITION: Vec3 = Vec3::new(LIMIT_POSITIONS.x, -SQUARE_SIZE * 5.5
 const WALL_FILL_COLOR: LinearRgba = LinearRgba::BLACK;
 const WALL_BORDER_COLOR: LinearRgba = LinearRgba::WHITE;
 
-pub fn get_wall_bundles() -> LinkedList<RectangleBundle> {
+pub fn get_wall_bundles() -> Vec<RectangleBundle> {
     
-    let mut walls = LinkedList::new();
-    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, WALL_BORDER_COLOR);
-    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, WALL_BORDER_COLOR);
-    let limit_border_up = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, WALL_BORDER_COLOR);
-    let limit_border_down = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, WALL_BORDER_COLOR);
+    let mut walls = Vec::new();
+    let limit_border_left = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, WALL_LEFT_POSITION, WALL_BORDER_COLOR);
+    let limit_border_right = Rectangle::new(LIMIT_HEIGHT, WALL_THICKNESS, WALL_RIGHT_POSITION, WALL_BORDER_COLOR);
+    let limit_border_up = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, WALL_UP_POSITION, WALL_BORDER_COLOR);
+    let limit_border_down = Rectangle::new(WALL_THICKNESS, LIMIT_WIGTH, WALL_DOWN_POSITION, WALL_BORDER_COLOR);
 
-    walls.push_front((limit_border_left, WALL_LEFT_POSITION));
-    walls.push_front((limit_border_right, WALL_RIGHT_POSITION));
-    walls.push_front((limit_border_up, WALL_UP_POSITION));
-    walls.push_front((limit_border_down, WALL_DOWN_POSITION));
+    walls.push(limit_border_left);
+    walls.push(limit_border_right);
+    walls.push(limit_border_up);
+    walls.push(limit_border_down);
 
 
-    let mut wall_bundles = LinkedList::new();
+    let mut wall_bundles = Vec::new();
 
     for wall in walls {
-        wall_bundles.push_front(wall.0.generate_sprite(wall.1));
+        wall_bundles.push(wall.generate_sprite());
     }
 
     return wall_bundles;
